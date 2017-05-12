@@ -24,7 +24,7 @@ loadJsonFile(path.join(process.cwd(), 'seedling.json'))
                 process.stdout.write(clc.red("Error while installing build-system package: \n" + error + "\n"));
             } else {
                 loadJsonFile(path.join(process.cwd(), 'seedling.json')).then(function(buildSystemPackageJson) {
-                    loadJsonFile(path.join(process.cwd(), 'node_modules/' + seedlingConfig.buildSystem.name + '/package.json')).then(function(packageJson) {
+                    loadJsonFile(path.join(process.cwd(), 'package.json')).then(function(packageJson) {
                         packageJson.scripts = lodash.merge(buildSystemPackageJson.scripts, seedlingConfig.scripts);
                         packageJson.dependencies = lodash.merge(buildSystemPackageJson.dependencies, seedlingConfig.dependencies);
                         packageJson.devDependencies = lodash.merge(buildSystemPackageJson.devDependencies, seedlingConfig.devDependencies);
