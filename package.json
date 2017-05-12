@@ -3,7 +3,10 @@
   "version": "1.1.0",
   "description": "A Javascript build system importer",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "postversion": "git push && git push --tags && npm publish",
+    "preversion": "(git tag -l | xargs git tag -d) && git fetch --tags"
+  },
   "bin": {
     "seedling": "./app/index.js"
   },
