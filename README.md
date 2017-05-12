@@ -24,35 +24,22 @@ npm install -g seedling-js
 ## Requirement
 
 To use Seedling in your project, you will need both a `seedling.json` file, and being able to download a package containing the build system.
+(And of course a traditional `package.json`)
 
 ### seedling.json
 
-A `package.json` file with a few extra properties, the easiest way to create it is to do:
-
-* `npm init`
-* Rename the package.json as `seedling.json`
-* Add the following properties to the `seedling.json` file
-
-**buildSystem**
-
-Will contain the build system package informations
+A JSON config file with a few properties:
 
 ```
 {
+	"scripts": {},
+	"devDependencies": {},
+	"dependencies": {},
+	"buildOptions": {},
     "buildSystem": {
         "name": "my-angular-webpack-build",
         "version": "^1.0.0"
     }
-}
-```
-
-**buildOptions**
-
-A property than can be read by the build system for project specific configuration
-
-```
-{
-    "buildOptions": {}
 }
 ```
 
@@ -87,10 +74,8 @@ All paths needs to take into account the fact that this package will be in `node
 
 ## How does it work?
 
-We are generating a `package.json` file by merging the properties `scripts`, `devDependencies`, `dependencies` of your
+We are making changes to the `package.json` file by merging the properties `scripts`, `devDependencies`, `dependencies` of your
 build system `package.json` and the `seedling.json` of your project.
-
-`package.json` should not be persisted (should be added to `.gitignore`) so do not make manual changes to it.
 
 To add a new dependency, you will have to add it directly to the project's `seedling.json` and run `seedling` again to download new dependencies and re-create the package.json.
 

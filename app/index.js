@@ -17,32 +17,31 @@ const lodash = require('lodash');
 
 loadJsonFile(path.join(process.cwd(), 'seedling.json'))
 .then(function(seedlingConfig) {
-    // TODO - Check for: no build-system folder || new npm version of build-system package
 
-    // TODO check seedlingConfig
     exec('npm install ' + seedlingConfig.buildSystem.name + '@' + seedlingConfig.buildSystem.version,
         (error, stdout, stderr) => {
             if (error) {
                 process.stdout.write(clc.red("Error while installing build-system package: \n" + error + "\n"));
             } else {
-                loadJsonFile(path.join(process.cwd(), 'node_modules/' + seedlingConfig.buildSystem.name + '/package.json')).then(function(buildSystemPackageJson) {
-
-                    seedlingConfig.scripts = lodash.merge(buildSystemPackageJson.scripts, seedlingConfig.scripts);
-                    seedlingConfig.dependencies = lodash.merge(buildSystemPackageJson.dependencies, seedlingConfig.dependencies);
-                    seedlingConfig.devDependencies = lodash.merge(buildSystemPackageJson.devDependencies, seedlingConfig.devDependencies);
-                    delete seedlingConfig.buildSystem;
-                    delete seedlingConfig.buildOptions;
-                    process.stdout.write("Installing Dependencies...\n");
-                    fs.writeJson(path.join(process.cwd(), 'package.json'), seedlingConfig).then(function(){
-                        exec('npm install', (error, stdout, stderr) => {
-                            if (error) {
-                                process.stdout.write(clc.red("Error while installing dependencies: \n" + error + "\n"));
-                            } else {
-                                process.stdout.write("All done!\n");
-                            }
+                loadJsonFile(path.join(process.cwd(), 'seedling.json')).then(function(buildSystemPackageJson) {
+                    loadJsonFile(path.join(process.cwd(), 'node_modules/' + seedlingConfig.buildSystem.name + '/package.json')).then(function(packageJson) {
+                        packageJson.scripts = lodash.merge(buildSystemPackageJson.scripts, seedlingConfig.scripts);
+                        packageJson.dependencies = lodash.merge(buildSystemPackageJson.dependencies, seedlingConfig.dependencies);
+                        packageJson.devDependencies = lodash.merge(buildSystemPackageJson.devDependencies, seedlingConfig.devDependencies);
+                        process.stdout.write("Installing Dependencies...\n");
+                        fs.writeJson(path.join(process.cwd(), 'package.json'), packageJson, {spaces: 2}).then(function(){
+                            exec('npm install', (error, stdout, stderr) => {
+                                if (error) {
+                                    process.stdout.write(clc.red("Error while installing dependencies: \n" + error + "\n"));
+                                } else {
+                                    process.stdout.write("All done!\n");
+                                }
+                            });
+                        }).catch(function(){
+                            process.stdout.write(clc.red("Error: Could not create package.json file"));
                         });
                     }).catch(function(){
-                        process.stdout.write(clc.red("Error: Could not create package.json file"));
+                        process.stdout.write(clc.red("Error: No package.json found \n"));
                     });
                 }).catch(function() {
                     process.stdout.write(clc.red("Error: No package.json file in " + seedlingConfig.buildSystem.name + "\n"));
