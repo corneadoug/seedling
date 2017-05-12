@@ -18,7 +18,7 @@ Here is what we try to achieve:
 
 ## Install
 ```
-npm install -g seedling
+npm install -g seedling-js
 ```
 
 ## Requirement
