@@ -32,14 +32,14 @@ A JSON config file with a few properties:
 
 ```
 {
-	"scripts": {},
-	"devDependencies": {},
-	"dependencies": {},
-	"buildOptions": {},
-    "buildSystem": {
-        "name": "my-angular-webpack-build",
-        "version": "^1.0.0"
-    }
+   "scripts": {},
+   "devDependencies": {},
+   "dependencies": {},
+   "buildOptions": {},
+   "buildSystem": {
+      "name": "my-angular-webpack-build",
+      "version": "^1.0.0"
+   }
 }
 ```
 
